@@ -3,8 +3,8 @@ import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import '../screens/location_screen.dart';
-import '../services/networking.dart';
 import '../services/weather.dart';
+import 'package:tempo_template/services/location.dart';
 import '../utilities/constants.dart';
 import 'package:flutter/src/widgets/navigator.dart';
 import 'package:http/http.dart' as http;
@@ -43,19 +43,19 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   void pushToLocationScreen(dynamic weatherData) {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return LocationScreen(locationWeather: weatherData, getLocationWeather: null,);
+      return LocationScreen(locationWeather: weatherData, getLocationWeather: null, localWeatherData: null,);
     }));
   }
 
   @override
   void initState() {
     super.initState();
-    updateUI(widget.locationWeather);
+    getData();
   }
 
   Future<void> getLocation() async {
     var location = Location();
-    await location.getCurrentPosition();
+    await location.getCurrentLocation();
 
     latitude = location.latitude!;
     longitude = location.longitude!;
@@ -64,10 +64,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
   }
 
   void getData() async {
-    NetworkHelper networkHelper = NetworkHelper('https://api.openweathermap.org/'
-        'data/2.5/weather?lat=$latitude&lon=$longitude&appid=$apiKey&units=metric');
-
-    var weatherData = await networkHelper.getData();
+    var weatherData = await WeatherModel().getLocationWeather();
+    pushToLocationScreen(weatherData);
   }
 
   @override
