@@ -63,7 +63,7 @@ que conterá a linha informada pela documentação, para obtermos a localizaçã
 
 ```dart
 void getLocation() {
-  Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
+  Position position = awaitGeolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
 }
 ```
 

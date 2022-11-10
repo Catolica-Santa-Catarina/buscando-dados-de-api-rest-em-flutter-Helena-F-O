@@ -4,8 +4,8 @@ import 'package:tempo_template/utilities/constants.dart';
 import '../services/weather.dart';
 
 class LocationScreen extends StatefulWidget {
-  const LocationScreen({required this.localWeatherData, Key? key, required getLocationWeather, required locationWeather}) : super(key: key);
   final dynamic localWeatherData;
+  const LocationScreen({required this.localWeatherData, Key? key}) : super(key: key);
 
   @override
   State<LocationScreen> createState() => _LocationScreenState();
@@ -19,6 +19,12 @@ class _LocationScreenState extends State<LocationScreen> {
   late String message;  // Frase para o usuário, de acordo com a temperatura
 
   WeatherModel weather = WeatherModel();
+
+  @override
+  void initState() {
+    super.initState();
+    updateUI(widget.localWeatherData);
+  }
 
   void updateUI(dynamic weatherData) {
     setState(() {
@@ -74,22 +80,22 @@ class _LocationScreenState extends State<LocationScreen> {
               Padding(
                 padding: const EdgeInsets.only(left: 15.0),
                 child: Row(
-                  children: const [
+                  children: [
                     Text(
-                      '32°',
+                      '$temperature°',
                       style: kTempTextStyle,
                     ),
                     Text(
-                      '☀️',
+                      weatherIcon,
                       style: kConditionTextStyle,
                     )
                   ],
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.only(right: 15.0),
+              Padding(
+                padding: const EdgeInsets.only(right: 15.0),
                 child: Text(
-                  'É tempo de 🍦 em Joinville!',
+                  '$message em $cityName',
                   textAlign: TextAlign.right,
                   style: kMessageTextStyle,
                 ),
